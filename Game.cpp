@@ -17,9 +17,9 @@ Game::~Game()
 void Game::GameStart()
 {
 	Lei L;
-	initgraph(640, 480);    // 初始化绘图窗口
+	initgraph(Picture_Width * Floor_Row, Picture_Width * Floor_Col);    // 初始化绘图窗口
 	L.Draw_Floor();
-	L.Draw_Text();
+//	L.Draw_Text();
 }
 
 void Game::GameOver()

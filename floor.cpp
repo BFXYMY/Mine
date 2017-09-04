@@ -1,10 +1,10 @@
 #include "floor.h"
 #include <iostream>
-#include <string>
 #include <stdlib.h>
 #include <time.h>
 #include <graphics.h>
 #include <conio.h>
+
 
 using namespace std;
 
@@ -18,51 +18,57 @@ Lei::~Lei()														//析构函数
 	
 }
 
-void Lei::Set_Mine()
+void Lei::Set_Mine(Cell map[Floor_Row][Floor_Col],int X_Start,int Y_Start)
 {
-	srand((unsigned)time(NULL));								//设置随机数种子
-	int Mine_Num = ( rand() % 9 ) + 1;							//设置1-9的随机数，公式百度有
-	cout << Mine_Num << endl;									//测试随机数是否符合要求，后续要把这一行代码注释掉
+	for(int i = 0; i < Floor_Row; i++)
+	{
+		for (int j = 0; j < Floor_Col; j++)
+		{
+			map[i][j].Mine_Num = 0;
+			map[i][j].Has_Mine = false;
+			map[i][j].Is_Dug = false;
+		}
 
-	int quotient = Mine_Num / 3;								//随机数除以3的商数，用来设计行数
-	int remainder = Mine_Num % 3;								//随机数除以3的余数，用来设计列数
+	}
 
-	if (0 == remainder)											//3的倍数： 3，6，9
-		mine[quotient - 1][2] = 1;
-	else
-		mine[quotient][remainder - 1] = 1;
+	srand((unsigned)time(NULL));										//设置随机数种子
+	int count = 0;														//设置当前地雷数量
+	int Mine[Mine_Number];												//设置地雷集（40个地雷）
+	while(count < Mine_Number)
+	{
+		if (0 == count)												
+			Mine[0] = rand() % (Floor_Row * Floor_Col);					//设置0-256的随机数，公式百度有
+		else
+		{
+			Mine[count] = Mine[count] = rand() % (Floor_Row * Floor_Col);
+		}
+		count++;
+	}
+
+	for(int i = 0; i < Mine_Number; i++)
+	{
+		map[Mine[i] / Floor_Row == 0 ? 0 : Mine[i] / Floor_Row - 1][Mine[i] - 1].Has_Mine = true;		//使用三目运算符，将地雷位置对应到地图中
+	}
+						
+
 	
 }
 
 
-void Lei::Draw_Floor()											//打印九宫格
+void Lei::Draw_Floor()											
 {
-	/*for(int i = 0; i < 3; i++)
+	IMAGE cell, none, mine, number;
+	loadimage(&cell,_T("./IMAGE/cell.jpg"));
+	loadimage(&none, _T("./IMAGE/s.jpg"));
+	for(int i = 0;i < Floor_Row; i++)
 	{
-		for (int j = 0; j < 3; j++)
+		for (int j = 0; j < Floor_Col; j++)
 		{
-			cout <<   "■";
-			if (2 == j)
-				cout << endl;
+			putimage(i * Picture_Width, j * Picture_Width, &cell);
+			putimage(i * Picture_Width, j * Picture_Width, &none);
 		}
-	}*/
-
-	
-
-	//第一行
-	fillrectangle(50, 50, 100, 100);
-	fillrectangle(105, 50, 155, 100);
-	fillrectangle(160, 50, 210, 100);
-
-	//第二行
-	fillrectangle(50,105,100,155);
-	fillrectangle(105, 105, 155, 155);
-	fillrectangle(160, 105, 210, 155);
-
-	//第三行
-	fillrectangle(50, 160, 100, 210);
-	fillrectangle(105, 160, 155,210);
-	fillrectangle(160, 160, 210,210);
+			
+	}
 
 
 }
@@ -87,17 +93,4 @@ void Lei::Draw_Text()
 
 
 
-void Lei::Draw_Num()											//打印九宫格数字，可看到炸弹所处位置，用以测试的函数，后期需注释，或用于设计作弊模式
-{
-	cout << endl;cout << endl;cout << endl;cout << endl;cout << endl;
-	for (int i = 0; i < 3; i++)
-	{
-		for (int j = 0; j < 3; j++)
-		{
-			cout << mine[i][j];
-			if (2 == j)
-				cout << endl;
-		}
-	}
-}
 
