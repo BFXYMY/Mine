@@ -5,7 +5,10 @@ class Game
 {
 public:
 	void GameStart();
-	void GameOver();
+	void GameOver_Win();
+	void GameOver_Lose();
+	void GameRun();
+	void Judge(int row,int col);
 	Game();
 	~Game();
 };

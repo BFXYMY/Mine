@@ -8,6 +8,7 @@ void main()
 	
 	Game G;
 	G.GameStart();
-	G.GameOver();
+	G.GameRun();
+//	G.GameOver();
 	
 }
